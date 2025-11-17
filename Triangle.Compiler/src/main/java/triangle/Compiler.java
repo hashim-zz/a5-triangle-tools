@@ -38,6 +38,7 @@ public class Compiler {
 	
 	static boolean showTree = false;
 	static boolean folding = false;
+    static boolean showTreeAfter = false;
 
 	private static Scanner scanner;
 	private static Parser parser;
@@ -97,6 +98,24 @@ public class Compiler {
 			if (folding) {
 				theAST.visit(new ConstantFolder());
 			}
+
+            if (showTreeAfter) {
+                if (theAST != null) {
+                    drawer.draw(theAST);
+
+                    // Keep the program alive until the window is closed
+                    while (javax.swing.JFrame.getFrames().length > 0 &&
+                            javax.swing.JFrame.getFrames()[0].isVisible()) {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
+                    }
+                } else {
+                    System.out.println("No AST to display.");
+                }
+            }
 			
 			if (reporter.getNumErrors() == 0) {
 				System.out.println("Code Generation ...");
@@ -148,6 +167,7 @@ public class Compiler {
         objectName = options.objectName;
         showTree = options.showTree;
         folding = options.folding;
+        showTreeAfter = options.showTreeAfter;
 
         // Compile
         boolean compiledOK = compileProgram(sourceName, objectName, showTree, false);

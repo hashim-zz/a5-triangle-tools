@@ -37,4 +37,10 @@ public class Options {
      */
     @Option(name = "--folding", description = "Enable constant folding.")
     public boolean folding = false;
+
+    /**
+     * Displays the AST after constant folding is appplied
+     */
+    @Option(name = "--showTreeAfter", description = "Show AST after constant folding")
+    public boolean showTreeAfter = false;
 }
