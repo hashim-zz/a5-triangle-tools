@@ -4,6 +4,12 @@ java {
     sourceCompatibility = 21
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
 subprojects.each { subproject ->
   evaluationDependsOn(subproject.path)
 }
