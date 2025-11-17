@@ -121,25 +121,35 @@ public class Compiler {
 	 *             source filename.
 	 */
     public static void main(String[] args) {
+        System.out.println("********** Triangle Compiler (Java Version 2.1) **********");
 
-        // Use Airline to parse command-line arguments
-        Options options = com.github.rvesse.airline.SingleCommand.singleCommand(Options.class).parse(args);
+        // Parse command line arguments with Airline
+        Options options = com.github.rvesse.airline.SingleCommand
+                .singleCommand(Options.class)
+                .parse(args);
 
-        String sourceName = null;
-
-        // The first argument should be the source file (e.g. programs/hi.tri)
-        if (args.length > 0 && !args[0].startsWith("--")) {
-            sourceName = args[0];
-        } else {
+        // Validate presence of source file
+        if (options.sourceFiles == null || options.sourceFiles.isEmpty()) {
+            System.out.println("Missing source file!");
             System.out.println("Usage: triangle-compiler <sourceFile> [--objectName=name] [--showTree] [--folding]");
             System.exit(1);
         }
 
-        // Assign values from parsed options
+        // Extract source file
+        String sourceName;
+        try {
+            sourceName = new java.io.File("../", options.sourceFiles.get(0)).getCanonicalPath();
+        } catch (Exception e) {
+            System.out.println("Error resolving source file path: " + e.getMessage());
+            return;
+        }
+
+        // Assign options
         objectName = options.objectName;
         showTree = options.showTree;
         folding = options.folding;
 
+        // Compile
         boolean compiledOK = compileProgram(sourceName, objectName, showTree, false);
 
         if (!showTree) {

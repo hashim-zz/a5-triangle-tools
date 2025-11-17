@@ -2,6 +2,7 @@ package triangle;
 
 import com.github.rvesse.airline.annotations.Command;
 import com.github.rvesse.airline.annotations.Option;
+import com.github.rvesse.airline.annotations.Arguments;
 
 /**
  * This class defines command-line options for the Triangle compiler.
@@ -9,6 +10,12 @@ import com.github.rvesse.airline.annotations.Option;
  */
 @Command(name = "triangle-compiler", description = "Compiles Triangle source code into TAM object code.")
 public class Options {
+
+    @Arguments(
+            title = "source",
+            description = "The Triangle source file to compile"
+    )
+    public java.util.List<String> sourceFiles;
 
     /**
      * Output filename for compiled TAM code.

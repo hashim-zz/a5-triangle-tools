@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-	mainClass = 'Triangle.Compiler'
+	mainClass = 'triangle.Compiler'
 }
 
 // allow access to programs for unit tests
