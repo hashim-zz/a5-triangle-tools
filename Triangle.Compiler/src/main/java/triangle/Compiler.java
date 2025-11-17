@@ -120,34 +120,30 @@ public class Compiler {
 	 * @param args the only command-line argument to the program specifies the
 	 *             source filename.
 	 */
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		if (args.length < 1) {
-			System.out.println("Usage: tc filename [-o=outputfilename] [tree] [folding]");
-			System.exit(1);
-		}
-		
-		parseArgs(args);
+        // Use Airline to parse command-line arguments
+        Options options = com.github.rvesse.airline.SingleCommand.singleCommand(Options.class).parse(args);
 
-		String sourceName = args[0];
-		
-		var compiledOK = compileProgram(sourceName, objectName, showTree, false);
+        String sourceName = null;
 
-		if (!showTree) {
-			System.exit(compiledOK ? 0 : 1);
-		}
-	}
-	
-	private static void parseArgs(String[] args) {
-		for (String s : args) {
-			var sl = s.toLowerCase();
-			if (sl.equals("tree")) {
-				showTree = true;
-			} else if (sl.startsWith("-o=")) {
-				objectName = s.substring(3);
-			} else if (sl.equals("folding")) {
-				folding = true;
-			}
-		}
-	}
+        // The first argument should be the source file (e.g. programs/hi.tri)
+        if (args.length > 0 && !args[0].startsWith("--")) {
+            sourceName = args[0];
+        } else {
+            System.out.println("Usage: triangle-compiler <sourceFile> [--objectName=name] [--showTree] [--folding]");
+            System.exit(1);
+        }
+
+        // Assign values from parsed options
+        objectName = options.objectName;
+        showTree = options.showTree;
+        folding = options.folding;
+
+        boolean compiledOK = compileProgram(sourceName, objectName, showTree, false);
+
+        if (!showTree) {
+            System.exit(compiledOK ? 0 : 1);
+        }
+    }
 }
