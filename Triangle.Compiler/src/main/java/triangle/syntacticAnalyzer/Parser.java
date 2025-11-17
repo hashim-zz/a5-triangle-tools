@@ -279,25 +279,52 @@ public class Parser {
 
 		switch (currentToken.kind) {
 
-		case IDENTIFIER: {
-			Identifier iAST = parseIdentifier();
-			if (currentToken.kind == Token.Kind.LPAREN) {
-				acceptIt();
-				ActualParameterSequence apsAST = parseActualParameterSequence();
-				accept(Token.Kind.RPAREN);
-				finish(commandPos);
-				commandAST = new CallCommand(iAST, apsAST, commandPos);
+            case IDENTIFIER: {
+                Identifier iAST = parseIdentifier();
 
-			} else {
+                if (currentToken.kind == Token.Kind.LPAREN) {
+                    // Procedure call
+                    acceptIt();
+                    ActualParameterSequence apsAST = parseActualParameterSequence();
+                    accept(Token.Kind.RPAREN);
+                    finish(commandPos);
+                    commandAST = new CallCommand(iAST, apsAST, commandPos);
 
-				Vname vAST = parseRestOfVname(iAST);
-				accept(Token.Kind.BECOMES);
-				Expression eAST = parseExpression();
-				finish(commandPos);
-				commandAST = new AssignCommand(vAST, eAST, commandPos);
-			}
-		}
-			break;
+                } else {
+
+                    // Parse variable name (vAST)
+                    Vname vAST = parseRestOfVname(iAST);
+
+                    // NEW FEATURE: handle a**;
+                    if (currentToken.kind == Token.Kind.DOUBLESTAR) {
+
+                        // consume the ** token
+                        acceptIt();
+
+                        // Build a := a * 2
+                        Operator mulOp = new Operator("*", commandPos);
+                        VnameExpression left = new VnameExpression(vAST, commandPos);
+
+                        IntegerLiteral twoLit = new IntegerLiteral("2", commandPos);
+                        IntegerExpression right = new IntegerExpression(twoLit, commandPos);
+
+                        BinaryExpression doubledExpr =
+                                new BinaryExpression(left, mulOp, right, commandPos);
+
+                        finish(commandPos);
+
+                        commandAST = new AssignCommand(vAST, doubledExpr, commandPos);
+
+                    } else {
+                        // Normal assignment
+                        accept(Token.Kind.BECOMES);
+                        Expression eAST = parseExpression();
+                        finish(commandPos);
+                        commandAST = new AssignCommand(vAST, eAST, commandPos);
+                    }
+                }
+            }
+            break;
 
 		case BEGIN:
 			acceptIt();

@@ -165,9 +165,19 @@ public final class Scanner {
 				takeIt();
 			return Token.Kind.INTLITERAL;
 
-		case '+':
+        // Support for '**' as a special token
+        case '*':
+            takeIt();
+            if (currentChar == '*') {
+                takeIt();
+                return Token.Kind.DOUBLESTAR;
+            }
+            while ( isOperator(currentChar))
+                takeIt();
+            return Token.Kind.OPERATOR;
+
+        case '+':
 		case '-':
-		case '*':
 		case '/':
 		case '=':
 		case '<':
