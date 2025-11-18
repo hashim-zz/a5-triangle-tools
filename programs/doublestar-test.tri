@@ -1,0 +1,5 @@
+let var a: Integer in
+begin
+  a := 5;
+  a**;
+end
