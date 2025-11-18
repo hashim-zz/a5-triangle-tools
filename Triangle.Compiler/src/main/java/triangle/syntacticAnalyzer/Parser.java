@@ -356,14 +356,14 @@ public class Parser {
 			break;
 
             case LOOP: {
-                acceptIt(); // consume 'loop'
-                Command c1AST = parseSingleCommand(); // parse C1
+                acceptIt();
+                Command c1AST = parseSingleCommand();
 
-                accept(Token.Kind.WHILE); // expect 'while'
-                Expression eAST = parseExpression(); // parse E
+                accept(Token.Kind.WHILE);
+                Expression eAST = parseExpression();
 
-                accept(Token.Kind.DO); // expect 'do'
-                Command c2AST = parseSingleCommand(); // parse C2
+                accept(Token.Kind.DO);
+                Command c2AST = parseSingleCommand();
 
                 finish(commandPos);
                 commandAST = new LoopWhileCommand(c1AST, eAST, c2AST, commandPos);

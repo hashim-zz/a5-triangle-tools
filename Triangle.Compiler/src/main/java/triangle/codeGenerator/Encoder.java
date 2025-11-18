@@ -44,6 +44,7 @@ import triangle.abstractSyntaxTrees.commands.IfCommand;
 import triangle.abstractSyntaxTrees.commands.LetCommand;
 import triangle.abstractSyntaxTrees.commands.SequentialCommand;
 import triangle.abstractSyntaxTrees.commands.WhileCommand;
+import triangle.abstractSyntaxTrees.commands.LoopWhileCommand;
 import triangle.abstractSyntaxTrees.declarations.BinaryOperatorDeclaration;
 import triangle.abstractSyntaxTrees.declarations.ConstDeclaration;
 import triangle.abstractSyntaxTrees.declarations.Declaration;
@@ -185,7 +186,22 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 		return null;
 	}
 
-	// Expressions
+	@Override
+    public Void visitLoopWhileCommand(LoopWhileCommand ast, Frame frame) {
+        int startC1Addr = emitter.getNextInstrAddr();
+        ast.C1.visit(this, frame);
+
+        int evalExprAddr = emitter.getNextInstrAddr();
+        ast.E.visit(this, frame);
+        int jumpIfFalseAddr = emitter.emit(OpCode.JUMPIF, Machine.falseRep, Register.CB, 0);
+
+        ast.C2.visit(this, frame);
+        emitter.emit(OpCode.JUMP, Register.CB, startC1Addr);
+        emitter.patch(jumpIfFalseAddr);
+        return null;
+    }
+
+    // Expressions
 	@Override
 	public Integer visitArrayExpression(ArrayExpression ast, Frame frame) {
 		ast.type.visit(this, frame);

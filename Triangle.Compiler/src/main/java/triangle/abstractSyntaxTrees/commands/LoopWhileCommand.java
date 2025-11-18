@@ -6,9 +6,9 @@ import triangle.syntacticAnalyzer.SourcePosition;
 
 public class LoopWhileCommand extends Command {
 
-    public final Command C1;
-    public final Expression E;
-    public final Command C2;
+    public Command C1;
+    public Expression E;
+    public Command C2;
 
     public LoopWhileCommand(Command c1AST, Expression eAST, Command c2AST, SourcePosition pos) {
         super(pos);
