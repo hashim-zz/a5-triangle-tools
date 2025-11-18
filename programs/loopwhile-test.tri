@@ -1,0 +1,9 @@
+let var a: Integer in
+begin
+  a := 0;
+  loop 
+    a := a + 1
+  while a < 3
+  do 
+    a := a * 2
+end

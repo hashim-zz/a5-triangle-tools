@@ -79,10 +79,11 @@ public class TestScanner {
 	}
 
     @Test
-    public void testDoubleStarCommand() {
-        compileExpectSuccess("/doublestar-test.tri");
-    }
-	
+    public void testDoubleStarCommand() { compileExpectSuccess("/doublestar-test.tri");}
+
+    @Test
+    public void testLoopWhileCommand() { compileExpectSuccess("/loopwhile-test.tri");}
+
 	
 	
 	private void compileExpectSuccess(String filename) {
