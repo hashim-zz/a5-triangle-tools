@@ -43,6 +43,7 @@ import triangle.abstractSyntaxTrees.commands.IfCommand;
 import triangle.abstractSyntaxTrees.commands.LetCommand;
 import triangle.abstractSyntaxTrees.commands.SequentialCommand;
 import triangle.abstractSyntaxTrees.commands.WhileCommand;
+import triangle.abstractSyntaxTrees.commands.LoopWhileCommand;
 import triangle.abstractSyntaxTrees.declarations.ConstDeclaration;
 import triangle.abstractSyntaxTrees.declarations.Declaration;
 import triangle.abstractSyntaxTrees.declarations.FuncDeclaration;
@@ -353,6 +354,21 @@ public class Parser {
 			commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
 		}
 			break;
+
+            case LOOP: {
+                acceptIt(); // consume 'loop'
+                Command c1AST = parseSingleCommand(); // parse C1
+
+                accept(Token.Kind.WHILE); // expect 'while'
+                Expression eAST = parseExpression(); // parse E
+
+                accept(Token.Kind.DO); // expect 'do'
+                Command c2AST = parseSingleCommand(); // parse C2
+
+                finish(commandPos);
+                commandAST = new LoopWhileCommand(c1AST, eAST, c2AST, commandPos);
+            }
+            break;
 
 		case WHILE: {
 			acceptIt();
