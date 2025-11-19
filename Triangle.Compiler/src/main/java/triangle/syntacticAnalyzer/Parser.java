@@ -333,11 +333,11 @@ public class Parser {
 			accept(Token.Kind.END);
 			break;
 
-        case LCURLY:
-            acceptIt();
-            commandAST = parseCommand();
-            accept(Token.Kind.RCURLY);
-            break;
+        //case LCURLY:
+        //    acceptIt();
+        //    commandAST = parseCommand();
+        //    accept(Token.Kind.RCURLY);
+        //    break;
 
 		case LET: {
 			acceptIt();

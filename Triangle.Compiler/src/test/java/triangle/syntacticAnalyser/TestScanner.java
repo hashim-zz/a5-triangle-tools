@@ -84,8 +84,8 @@ public class TestScanner {
     @Test
     public void testLoopWhileCommand() { compileExpectSuccess("/loopwhile-test.tri");}
 
-	@Test
-    public void testWhileWithCurlyBrackets() { compileExpectSuccess("/while-curly.tri");}
+	//@Test
+    //public void testWhileWithCurlyBrackets() { compileExpectSuccess("/while-curly.tri");}
 	
 	private void compileExpectSuccess(String filename) {
 		// build.gradle has a line sourceSets.test.resources.srcDir file("$rootDir/programs")
