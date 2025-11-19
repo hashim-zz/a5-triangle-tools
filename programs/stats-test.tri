@@ -1,0 +1,8 @@
+let
+  x : Integer;
+  y : Integer;
+in
+begin
+  x := 3;
+  y := x + 4;
+end

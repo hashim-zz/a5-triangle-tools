@@ -23,6 +23,7 @@ import triangle.codeGenerator.Emitter;
 import triangle.codeGenerator.Encoder;
 import triangle.contextualAnalyzer.Checker;
 import triangle.optimiser.ConstantFolder;
+import triangle.optimiser.StatCounter;
 import triangle.syntacticAnalyzer.Parser;
 import triangle.syntacticAnalyzer.Scanner;
 import triangle.syntacticAnalyzer.SourceFile;
@@ -39,6 +40,7 @@ public class Compiler {
 	static boolean showTree = false;
 	static boolean folding = false;
     static boolean showTreeAfter = false;
+    static boolean showStats = false;
 
 	private static Scanner scanner;
 	private static Parser parser;
@@ -98,6 +100,14 @@ public class Compiler {
 			if (folding) {
 				theAST.visit(new ConstantFolder());
 			}
+
+            if (showStats) {
+                System.out.println("Running StatCounter...");
+                StatCounter counter = new StatCounter();
+                theAST.visit(counter, null);
+                System.out.println("Integer expressions: " + counter.getIntegerExpressionCount());
+                System.out.println("Character expressions: " + counter.getCharacterExpressionCount());
+            }
 
             if (showTreeAfter) {
                 if (theAST != null) {
@@ -168,6 +178,7 @@ public class Compiler {
         showTree = options.showTree;
         folding = options.folding;
         showTreeAfter = options.showTreeAfter;
+        showStats = options.showStats;
 
         // Compile
         boolean compiledOK = compileProgram(sourceName, objectName, showTree, false);
