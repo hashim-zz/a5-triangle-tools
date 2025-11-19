@@ -1,8 +1,7 @@
 let
   x : Integer;
-  y : Integer;
+  y : Character
 in
-begin
-  x := 3;
-  y := x + 4;
-end
+  x := 5;
+  y := 'a';
+  x := x + 2
